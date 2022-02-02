@@ -17,13 +17,13 @@ import 'employee/block.dart';
 import 'employee/events.dart';
 
 void main() {
-  runApp( MyApp20());
+  runApp( MyApp());
 }
-class MyApp20 extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Bloc Demo',
+      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
