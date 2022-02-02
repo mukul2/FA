@@ -28,39 +28,16 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: EmployeesScreen(),
+      home: AppAscreen(),
     );
   }
 }
 
-
-class EmployeesScreen extends StatefulWidget {
-   EmployeesScreen() ;
-
-
-  @override
-  State<EmployeesScreen> createState() => _EmployeesScreenState();
-}
-
-class _EmployeesScreenState extends State<EmployeesScreen> {
-
-
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    AppWidget().downloadData();
-
-  }
+class AppAscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
+    AppWidget().downloadData();
     return  DefaultTabController(
       length: 2,
       child: Scaffold(floatingActionButton: FloatingActionButton.extended(onPressed: (){  AppWidget(). downloadData();}, label: Text("Refresh")),
@@ -85,7 +62,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
         ),
       ),
     );
-
   }
 }
+
+
 
