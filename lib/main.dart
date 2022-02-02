@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'Streams.dart';
+import 'Widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
 class EmployeesScreen extends StatefulWidget {
    EmployeesScreen() ;
 
@@ -40,38 +43,15 @@ class EmployeesScreen extends StatefulWidget {
 }
 
 class _EmployeesScreenState extends State<EmployeesScreen> {
-  List<dynamic> employeeHR = [];
-  List<dynamic> employeeIT = [];
-  downloadData(){
-    employeeHR.clear();
-    employeeIT.clear();
-
-    employeeHR.add({"firstName":"Name 1","lastName":"last Name","id":1});
-    employeeHR.add({"firstName":"Name 2","lastName":"last Name 2","id":2});
-    employeeHR.add({"firstName":"Name 3","lastName":"last Name 3","id":3});
-    employeeHR.add({"firstName":"Name 4","lastName":"last Name 4","id":4});
 
 
-
-    Future.delayed(Duration(seconds: 1)).then((value) =>  EmployeeHRStream.getInstance().reload(true));
-
-
-    employeeIT.add({"firstName":"Name 5","lastName":"last Name 5","id":5});
-    employeeIT.add({"firstName":"Name 6","lastName":"last Name 6","id":6});
-    employeeIT.add({"firstName":"Name 7","lastName":"last Name 7","id":7});
-    employeeIT.add({"firstName":"Name 8","lastName":"last Name 8","id":8});
-    Future.delayed(Duration(seconds: 1)).then((value) =>  EmployeeITStream.getInstance().reload(true));
-
-
-
-  }
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    downloadData();
+    AppWidget().downloadData();
 
   }
 
@@ -83,7 +63,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
 
     return  DefaultTabController(
       length: 2,
-      child: Scaffold(floatingActionButton: FloatingActionButton.extended(onPressed: (){  downloadData();}, label: Text("Refresh")),
+      child: Scaffold(floatingActionButton: FloatingActionButton.extended(onPressed: (){  AppWidget(). downloadData();}, label: Text("Refresh")),
         appBar: AppBar(
 
           bottom: const TabBar(
@@ -97,58 +77,9 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
         ),
         body:  TabBarView(
           children: [
-          StreamBuilder<bool>(
+            AppWidget().getEmployeeIT(),
+            AppWidget().getEmployeeHR(),
 
-          stream:EmployeeITStream.getInstance().listen,
-           builder: (c, snapsot) {
-            if(snapsot.hasData){
-              return employeeIT.length>0? ListView.builder(shrinkWrap: true,
-                itemCount: employeeIT.length,
-                itemBuilder: (context, index) {
-                  return ListTile(leading: CircleAvatar(),subtitle: Text(employeeHR[index]["lastName"]),trailing: IconButton(onPressed: (){
-                    employeeIT.removeAt(index);
-                    EmployeeITStream.getInstance().reload(true);
-
-                  },icon: Icon(Icons.delete),),
-                    title: Text( employeeIT[index]["firstName"]),
-                  );
-                },
-              ):Center(child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text("No Data"),
-              ),);
-            }else{
-              Future.delayed(Duration(seconds: 1)).then((value) =>  EmployeeITStream.getInstance().reload(true) );
-
-              return Scaffold(body: Center(child: CircularProgressIndicator(),),);
-            }
-           }),
-            StreamBuilder<bool>(
-
-                stream:EmployeeHRStream.getInstance().listen,
-                builder: (c, snapsot) {
-                  if(snapsot.hasData){
-                    return employeeHR.length>0? ListView.builder(shrinkWrap: true,
-                      itemCount: employeeHR.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(leading: CircleAvatar(),subtitle: Text(employeeHR[index]["lastName"]),trailing: IconButton(onPressed: (){
-                          employeeHR.removeAt(index);
-                          EmployeeHRStream.getInstance().reload(true);
-
-                        },icon: Icon(Icons.delete),),
-                          title: Text( employeeHR[index]["firstName"]),
-                        );
-                      },
-                    ):Center(child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text("No Data"),
-                  ),);
-                  }else{
-                    Future.delayed(Duration(seconds: 1)).then((value) =>  EmployeeHRStream.getInstance().reload(true) );
-
-                    return Scaffold(body: Center(child: CircularProgressIndicator(),),);
-                  }
-                }),
 
           ],
         ),
